@@ -1,0 +1,167 @@
+services:
+  nginx:
+    container_name: nginx
+    image: nginx:alpine
+    ports:
+      - "8080:80"
+    depends_on:
+      - app
+      - db
+    volumes:
+      - ./src:/var/www
+      - ./nginx/conf.d/:/etc/nginx/conf.d
+
+  db:
+    image: mysql
+    container_name: mysql
+    ports:
+      - "3307:3306"
+    volumes:
+      - ./mysql/data:/var/lib/mysql
+    environment:
+      - MYSQL_DATABASE=blog
+      - MYSQL_ROOT_PASSWORD=password
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    container_name: phpmyadmin
+    ports:
+      - "3400:80"
+    depends_on:
+      - db
+
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: app
+    ports:
+      - "9000:9000"
+    volumes:
+      - ./src:/var/www
+      - ./php-fpm/php.ini:/usr/local/etc/php/php.ini
+    depends_on:
+      - db
+
+volumes:
+  mysql_data:
+
+networks:
+  blog_default:
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+#version: '3.8'
+#
+#services:
+#  nginx:
+#    container_name: nginx
+#    image: nginx:alpine
+#    ports:
+#      - "8080:80"
+#    depends_on:
+#      - app
+#      - db
+#    volumes:
+#      - ./src:/var/www
+#      - ./nginx/conf.d/:/etc/nginx/conf.d
+#
+#  db:
+#    image: mysql
+#    container_name: mysql
+#    ports:
+#      - "3306:3306"
+#    volumes:
+#      - ./mysql/data:/var/lib/mysql
+#    environment:
+#      - MYSQL_DATABASE=blog
+#      - MYSQL_ROOT_PASSWORD=password
+#
+#  phpmyadmin:
+#    image: phpmyadmin/phpmyadmin
+#    container_name: phpmyadmin
+#    ports:
+#      - "3400:80"
+#    depends_on:
+#      - db
+#
+#  app:
+#    build:
+#      context: .
+#      dockerfile: Dockerfile
+#    container_name: app
+#    ports:
+#      - "9000:9000"
+#    volumes:
+#      - ./src:/var/www
+#      - ./php-fpm/php.ini:/usr/local/etc/php/php.ini
+#    depends_on:
+#      - db
+
+
+
+
+
+
+
+
+
+
+#services:
+#  nginx:
+#    container_name: nginx
+#    image: nginx:alpine
+#    ports:
+#      - "8080:80"
+#    depends_on:
+#      - app
+#      - db
+#    volumes:
+#      - ./src:/var/www
+#      - ./nginx/conf.d/:/etc/nginx/conf.d
+#
+#  db:
+#    image: mysql
+#    container_name: mysql
+#    ports:
+#      - "3306:3306"
+#    volumes:
+#      - ./mysql/data:/var/lib/mysql
+#    environment:
+#      - MYSQL_DATABASE=blog
+#      - MYSQL_ROOT_PASSWORD=password
+#
+#  phpmyadmin:
+#    image: phpmyadmin/phpmyadmin
+#    container_name: phpmyadmin
+#    ports:
+#      - "3400:80"
+#    depends_on:
+#      - db
+#
+#  app:
+#    build:
+#      context: .
+#      dockerfile: Dockerfile
+#    container_name: app
+#    image: php:8.2.1-fpm
+#    ports:
+#      - "9000:9000"
+#    volumes:
+#      - ./src:/var/www
+#      - ./php-fpm/php.ini:/usr/local/etc/php/php.ini
+#    depends_on:
+#      - db
